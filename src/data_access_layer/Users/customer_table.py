@@ -25,7 +25,7 @@ session = Session()
 customer1 = Customer(name='Esra Gokcen', email='esrag@mail.com', password='gok123')
 customer2 = Customer(name='Eda Gokcen', email='edagokcen@hotmail.com', password='Pirtik24!')
 
-session.add_all([])
+session.add_all([customer1, customer2])
 session.commit()
 
 session.close()
