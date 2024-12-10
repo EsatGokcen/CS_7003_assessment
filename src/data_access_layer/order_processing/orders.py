@@ -23,8 +23,8 @@ Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 session = Session()
 
-order1 = Orders(order_date="10/12/2024", total_amount=34.65)
-order2 = Orders(order_date="27/11/2024", total_amount=24.15)
+order1 = Orders(order_date="10/12/2024", total_amount=34.65) # 11 Lattes
+order2 = Orders(order_date="27/11/2024", total_amount=24.15) # 7 Flat Whites
 
 session.add_all([order1, order2])
 session.commit()

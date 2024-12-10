@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, Integer, String, Boolean, Float
+from sqlalchemy import create_engine, Column, Integer
 from sqlalchemy.orm import declarative_base, sessionmaker
 
 engine = create_engine('sqlite:///order_details.db')
@@ -17,3 +17,16 @@ class OrderDetails(Base):
     # subtotal = quantity * price
 
 Base.metadata.create_all(engine)
+
+# Create session and add data to table
+
+Session = sessionmaker(bind=engine)
+session = Session()
+
+order_details1 = OrderDetails(quantity=11) # 11 Lattes
+order_details2 = OrderDetails(quantity=7) # 7 Flat Whites
+
+session.add_all([order_details1, order_details2])
+session.commit()
+
+session.close()
