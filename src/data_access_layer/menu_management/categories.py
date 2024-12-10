@@ -14,3 +14,16 @@ class Categories(Base):
     category_name = Column(String, nullable=False)
 
 Base.metadata.create_all(engine)
+
+# Create session and add data to table
+
+Session = sessionmaker(bind=engine)
+session = Session()
+
+category1 = Categories(category_name="Beverages")
+category2 = Categories(category_name="Utensils")
+
+session.add_all([category1, category2])
+session.commit()
+
+session.close()
