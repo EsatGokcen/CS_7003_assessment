@@ -23,7 +23,7 @@ Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 session = Session()
 
-order_details1 = OrderDetails(quantity=11) # 11 Lattes
+order_details1 = OrderDetails(quantity=11) # 11 Lattes / # THIS IS ALL BUSINESS LOGIC AS IT ADDS DATA TO TABLE
 order_details2 = OrderDetails(quantity=7) # 7 Flat Whites
 
 session.add_all([order_details1, order_details2])

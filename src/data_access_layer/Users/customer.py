@@ -22,7 +22,7 @@ Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 session = Session()
 
-customer1 = Customer(name='Esra Gokcen', email='esrag@mail.com', password='gok123')
+customer1 = Customer(name='Esra Gokcen', email='esrag@mail.com', password='gok123') # THIS IS ALL BUSINESS LOGIC AS IT ADDS DATA TO TABLE
 customer2 = Customer(name='Eda Gokcen', email='edagokcen@hotmail.com', password='Pirtik24!')
 
 session.add_all([customer1, customer2])

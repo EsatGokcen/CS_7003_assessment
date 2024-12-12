@@ -23,7 +23,7 @@ Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 session = Session()
 
-item1 = MenuItems(name="Latte", price=3.15, description="single shot milk coffee", IsAvailable=True)
+item1 = MenuItems(name="Latte", price=3.15, description="single shot milk coffee", IsAvailable=True) # THIS IS ALL BUSINESS LOGIC AS IT ADDS DATA TO TABLE
 item2 = MenuItems(name="Flat White", price=3.45, description="double shot milk froth coffee", IsAvailable=True)
 
 session.add_all([item1, item2])

@@ -20,7 +20,7 @@ Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 session = Session()
 
-category1 = Categories(category_name="Beverages")
+category1 = Categories(category_name="Beverages") # THIS IS ALL BUSINESS LOGIC AS IT ADDS DATA TO TABLE
 category2 = Categories(category_name="Utensils")
 
 session.add_all([category1, category2])

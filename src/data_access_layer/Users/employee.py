@@ -22,7 +22,7 @@ Base.metadata.create_all(engine)
 
 Session = sessionmaker(bind=engine)
 session = Session()
-
+# THIS IS ALL BUSINESS LOGIC AS IT ADDS DATA TO TABLE
 employee1 = Employee(name='Esat Gokcen', email='esatgokcen@gmail.com', password='KingSnake31!', salary=40000)
 employee2 = Employee(name='Taha Tariq', email='taha@hotmail.com', password='TahaisBest!', salary=30000)
 

@@ -19,7 +19,7 @@ Base.metadata.create_all(engine)
 
 Session = sessionmaker(bind=engine)
 session = Session()
-
+# THIS IS ALL BUSINESS LOGIC AS IT ADDS DATA TO TABLE
 role1 = Roles(role_name='Manager')
 role2 = Roles(role_name='Barista')
 
