@@ -13,3 +13,5 @@ def create_users_table():
         is_admin BOOLEAN DEFAULT 0
     )
     """)
+
+    connection.commit()
