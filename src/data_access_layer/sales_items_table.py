@@ -36,5 +36,17 @@ def view_sales_items():
     for row in rows:
         print(row)
 
+def view_sales_items_by_sale_id(sale_id: int):
+    cursor.execute("SELECT * FROM sales_items WHERE sale_id = ?", (sale_id,))
+    rows = cursor.fetchall()
+    for row in rows:
+        print(row)
+
+def view_sales_items_by_item_id(item_id: int):
+    cursor.execute("SELECT * FROM sales_items WHERE item_id = ?", (item_id,))
+    rows = cursor.fetchall()
+    for row in rows:
+        print(row)
+
 
 connection.close()
