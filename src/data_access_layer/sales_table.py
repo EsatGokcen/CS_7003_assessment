@@ -28,3 +28,9 @@ def add_sale(date: str, total_amount: float, user_id: int):
         print("Sale added successfully!")
     except sqlite3.Error as e:
         print("An error occurred:", e)
+
+def view_sales():
+    cursor.execute("SELECT * FROM sales")
+    rows = cursor.fetchall()
+    for row in rows:
+        print(row)
