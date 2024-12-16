@@ -16,3 +16,14 @@ def create_inventory_table():
     """)
 
     connection.commit()
+
+def add_item(item_name: str, quantity: int, cost: float):
+    try:
+        cursor.execute("""
+        INSERT INTO Inventory (item_name, quantity, cost) 
+        VALUES (?, ?, ?)
+        """, (item_name, quantity, cost))
+        connection.commit()
+        print("Item added successfully!")
+    except sqlite3.Error as e:
+        print(f"Error adding item: {e}")
