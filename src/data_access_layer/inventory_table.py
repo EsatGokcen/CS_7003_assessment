@@ -39,3 +39,8 @@ def view_item_in_inventory(item_name: str):
     rows = cursor.fetchall()
     for row in rows:
         print(row)
+
+def delete_item(item_id: int):
+    cursor.execute("DELETE FROM inventory WHERE item_id = ?", (item_id,))
+    connection.commit()
+    print(f"Item with ID {item_id} deleted.")
