@@ -48,5 +48,9 @@ def view_sales_items_by_item_id(item_id: int):
     for row in rows:
         print(row)
 
+def delete_sales_item(sales_item_id: int):
+    cursor.execute("DELETE FROM sales_items WHERE sales_item_id = ?", (sales_item_id,))
+    connection.commit()
+    print(f"Sales-item with ID {sales_item_id} deleted.")
 
 connection.close()
