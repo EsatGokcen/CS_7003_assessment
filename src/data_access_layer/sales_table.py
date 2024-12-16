@@ -34,3 +34,9 @@ def view_sales():
     rows = cursor.fetchall()
     for row in rows:
         print(row)
+
+def view_sales_by_date(date: str):
+    cursor.execute("SELECT * FROM sales WHERE date = ?", (date,))
+    rows = cursor.fetchall()
+    for row in rows:
+        print(row)
