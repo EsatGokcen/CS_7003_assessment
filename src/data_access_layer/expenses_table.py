@@ -1,8 +1,10 @@
 from src.data_access_layer.database_connection import get_connection
+import sqlite3
+
+connection = get_connection()
+cursor = connection.cursor()
 
 def create_expenses_table():
-    connection = get_connection()
-    cursor = connection.cursor()
 
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS Expenses (
@@ -17,3 +19,14 @@ def create_expenses_table():
     """)
 
     connection.commit()
+
+def add_expense(user_id, date, amount, category, description=None):
+    try:
+        cursor.execute("""
+        INSERT INTO Expenses (user_id, date, amount, category, description)
+        VALUES (?, ?, ?, ?, ?)
+        """, (user_id, date, amount, category, description))
+        connection.commit()
+        print("Expense added successfully!")
+    except sqlite3.Error as e:
+        print("An error occurred:", e)
