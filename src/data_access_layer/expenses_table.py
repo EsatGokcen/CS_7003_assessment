@@ -42,3 +42,8 @@ def view_expenses_by_category(category):
     rows = cursor.fetchall()
     for row in rows:
         print(row)
+
+def delete_expense(expense_id):
+    cursor.execute("DELETE FROM Expenses WHERE expense_id = ?", (expense_id,))
+    connection.commit()
+    print(f"Expense with ID {expense_id} deleted.")
