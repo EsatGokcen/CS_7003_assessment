@@ -44,3 +44,5 @@ def delete_item(item_id: int):
     cursor.execute("DELETE FROM inventory WHERE item_id = ?", (item_id,))
     connection.commit()
     print(f"Item with ID {item_id} deleted.")
+
+connection.close()

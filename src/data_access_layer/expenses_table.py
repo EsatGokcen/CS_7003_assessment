@@ -47,3 +47,5 @@ def delete_expense(expense_id: int):
     cursor.execute("DELETE FROM Expenses WHERE expense_id = ?", (expense_id,))
     connection.commit()
     print(f"Expense with ID {expense_id} deleted.")
+
+connection.close()
