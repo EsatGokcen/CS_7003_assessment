@@ -33,3 +33,9 @@ def view_inventory():
     rows = cursor.fetchall()
     for row in rows:
         print(row)
+
+def view_item_in_inventory(item_name: str):
+    cursor.execute("SELECT * FROM inventory WHERE item_name = ?", (item_name,))
+    rows = cursor.fetchall()
+    for row in rows:
+        print(row)
