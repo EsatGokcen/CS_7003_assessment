@@ -7,7 +7,7 @@ cursor = connection.cursor()
 def create_inventory_table():
 
     cursor.execute("""
-    CREATE TABLE IF NOT EXISTS Inventory (
+    CREATE TABLE IF NOT EXISTS inventory (
         item_id INTEGER PRIMARY KEY AUTOINCREMENT,
         item_name TEXT UNIQUE NOT NULL,
         quantity INTEGER NOT NULL,
@@ -20,10 +20,16 @@ def create_inventory_table():
 def add_item(item_name: str, quantity: int, cost: float):
     try:
         cursor.execute("""
-        INSERT INTO Inventory (item_name, quantity, cost) 
+        INSERT INTO inventory (item_name, quantity, cost) 
         VALUES (?, ?, ?)
         """, (item_name, quantity, cost))
         connection.commit()
         print("Item added successfully!")
     except sqlite3.Error as e:
         print(f"Error adding item: {e}")
+
+def view_inventory():
+    cursor.execute("SELECT * FROM inventory")
+    rows = cursor.fetchall()
+    for row in rows:
+        print(row)
