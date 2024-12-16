@@ -30,3 +30,9 @@ def add_expense(user_id, date, amount, category, description=None):
         print("Expense added successfully!")
     except sqlite3.Error as e:
         print("An error occurred:", e)
+
+def view_expenses():
+    cursor.execute("SELECT * FROM Expenses")
+    rows = cursor.fetchall()
+    for row in rows:
+        print(row)
