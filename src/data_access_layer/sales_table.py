@@ -40,3 +40,8 @@ def view_sales_by_date(date: str):
     rows = cursor.fetchall()
     for row in rows:
         print(row)
+
+def delete_sale(sale_id: int):
+    cursor.execute("DELETE FROM sales WHERE sale_id = ?", (sale_id,))
+    connection.commit()
+    print(f"Sale with ID {sale_id} deleted.")
