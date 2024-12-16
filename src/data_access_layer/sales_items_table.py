@@ -30,4 +30,11 @@ def add_sale_item(sale_id: int, item_id: int, quantity: int, price: float):
     except sqlite3.Error as e:
         print("An error occurred:", e)
 
+def view_sales_items():
+    cursor.execute("SELECT * FROM sales_items")
+    rows = cursor.fetchall()
+    for row in rows:
+        print(row)
+
+
 connection.close()
