@@ -20,7 +20,7 @@ def create_expenses_table():
 
     connection.commit()
 
-def add_expense(user_id, date, amount, category, description=None):
+def add_expense(user_id: int, date: str, amount: float, category: str, description: str =None):
     try:
         cursor.execute("""
         INSERT INTO Expenses (user_id, date, amount, category, description)
