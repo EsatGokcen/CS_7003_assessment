@@ -22,7 +22,7 @@ def add_user(username: str, password: str, email: str, is_admin: bool = False):
     try:
         cursor.execute("""
         INSERT INTO users (username, password, email, is_admin)
-        VALUES (?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?)
         """, (username, password, email, is_admin))
         connection.commit()
         print("User added successfully!")

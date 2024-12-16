@@ -22,7 +22,7 @@ def add_sale(date: str, total_amount: float, user_id: int):
     try:
         cursor.execute("""
         INSERT INTO sales (date, total_amount, user_id)
-        VALUES (?, ?, ?, ?, ?)
+        VALUES (?, ?, ?)
         """, (date, total_amount, user_id))
         connection.commit()
         print("Sale added successfully!")

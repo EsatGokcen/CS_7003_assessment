@@ -19,4 +19,15 @@ def create_sales_items_table():
 
     connection.commit()
 
+def add_sale_item(sale_id: int, item_id: int, quantity: int, price: float):
+    try:
+        cursor.execute("""
+        INSERT INTO sales_items (sale_id, item_id, quantity, price)
+        VALUES (?, ?, ?, ?)
+        """, (sale_id, item_id, quantity, price))
+        connection.commit()
+        print("Sale-Item added successfully!")
+    except sqlite3.Error as e:
+        print("An error occurred:", e)
+
 connection.close()
