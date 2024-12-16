@@ -34,3 +34,9 @@ def view_users():
     rows = cursor.fetchall()
     for row in rows:
         print(row)
+
+def view_user_by_username(username: str):
+    cursor.execute("SELECT * FROM users WHERE username = ?", (username,))
+    rows = cursor.fetchall()
+    for row in rows:
+        print(row)

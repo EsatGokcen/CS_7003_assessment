@@ -37,13 +37,13 @@ def view_expenses():
     for row in rows:
         print(row)
 
-def view_expenses_by_category(category):
+def view_expenses_by_category(category: str):
     cursor.execute("SELECT * FROM Expenses WHERE category = ?", (category,))
     rows = cursor.fetchall()
     for row in rows:
         print(row)
 
-def delete_expense(expense_id):
+def delete_expense(expense_id: int):
     cursor.execute("DELETE FROM Expenses WHERE expense_id = ?", (expense_id,))
     connection.commit()
     print(f"Expense with ID {expense_id} deleted.")
