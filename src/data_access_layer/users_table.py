@@ -40,3 +40,8 @@ def view_user_by_username(username: str):
     rows = cursor.fetchall()
     for row in rows:
         print(row)
+
+def delete_user(user_id: int):
+    cursor.execute("DELETE FROM users WHERE user_id = ?", (user_id,))
+    connection.commit()
+    print(f"User with ID {user_id} deleted.")
