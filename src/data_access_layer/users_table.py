@@ -21,10 +21,16 @@ def create_users_table():
 def add_user(username: str, password: str, email: str, is_admin: bool = False):
     try:
         cursor.execute("""
-        INSERT INTO Expenses (user_id, date, amount, category, description)
+        INSERT INTO users (username, password, email, is_admin)
         VALUES (?, ?, ?, ?, ?)
         """, (username, password, email, is_admin))
         connection.commit()
-        print("Expense added successfully!")
+        print("User added successfully!")
     except sqlite3.Error as e:
         print("An error occurred:", e)
+
+def view_users():
+    cursor.execute("SELECT * FROM users")
+    rows = cursor.fetchall()
+    for row in rows:
+        print(row)
