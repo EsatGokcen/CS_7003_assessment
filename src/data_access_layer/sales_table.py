@@ -17,3 +17,14 @@ def create_sales_table():
     ''')
 
     connection.commit()
+
+def add_sale(date: str, total_amount: float, user_id: int):
+    try:
+        cursor.execute("""
+        INSERT INTO sales (date, total_amount, user_id)
+        VALUES (?, ?, ?, ?, ?)
+        """, (date, total_amount, user_id))
+        connection.commit()
+        print("Sale added successfully!")
+    except sqlite3.Error as e:
+        print("An error occurred:", e)
