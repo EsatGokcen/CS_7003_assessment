@@ -36,3 +36,9 @@ def view_expenses():
     rows = cursor.fetchall()
     for row in rows:
         print(row)
+
+def view_expenses_by_category(category):
+    cursor.execute("SELECT * FROM Expenses WHERE category = ?", (category,))
+    rows = cursor.fetchall()
+    for row in rows:
+        print(row)
