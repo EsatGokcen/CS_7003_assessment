@@ -5,19 +5,17 @@ connection = get_connection()
 cursor = connection.cursor()
 
 def create_expenses_table():
-
     cursor.execute("""
-    CREATE TABLE IF NOT EXISTS expenses (
-        expense_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER NOT NULL,
-        date TEXT NOT NULL,
-        amount REAL NOT NULL,
-        category TEXT NOT NULL,
-        description TEXT,
-        FOREIGN KEY (user_id) REFERENCES users(user_id)
-    );
-    """)
-
+            CREATE TABLE IF NOT EXISTS expenses (
+                expense_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                date TEXT NOT NULL,
+                amount REAL NOT NULL,
+                category TEXT NOT NULL,
+                description TEXT,
+                FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+            )
+        """)
     connection.commit()
 
 def add_expense(user_id: int, date: str, amount: float, category: str, description: str =None):
