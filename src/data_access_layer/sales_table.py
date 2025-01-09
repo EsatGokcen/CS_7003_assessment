@@ -5,17 +5,15 @@ connection = get_connection()
 cursor = connection.cursor()
 
 def create_sales_table():
-
-    cursor.execute('''
-    CREATE TABLE IF NOT EXISTS sales (
-        sale_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        date TEXT NOT NULL,
-        total_amount REAL NOT NULL,
-        user_id INTEGER NOT NULL,
-        FOREIGN KEY (user_id) REFERENCES users(user_id)
-    )
-    ''')
-
+    cursor.execute("""
+            CREATE TABLE IF NOT EXISTS sales (
+                sale_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                date TEXT NOT NULL,
+                total_amount REAL NOT NULL,
+                FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+            )
+        """)
     connection.commit()
 
 def add_sale(date: str, total_amount: float, user_id: int):
