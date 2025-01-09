@@ -16,7 +16,7 @@ def create_sales_table():
         """)
     connection.commit()
 
-def add_sale(date: str, total_amount: float, user_id: int):
+def add_sale(user_id: int, date: str, total_amount: float):
     try:
         cursor.execute("""
         INSERT INTO sales (date, total_amount, user_id)
