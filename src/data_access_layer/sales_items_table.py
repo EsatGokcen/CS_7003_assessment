@@ -12,8 +12,8 @@ def create_sales_items_table():
         item_id INTEGER NOT NULL,
         quantity INTEGER NOT NULL,
         price REAL NOT NULL,
-        FOREIGN KEY (sale_id) REFERENCES sales(sale_id),
-        FOREIGN KEY (item_id) REFERENCES inventory(item_id)
+        FOREIGN KEY (sale_id) REFERENCES sales(sale_id) ON DELETE CASCADE,
+        FOREIGN KEY (item_id) REFERENCES inventory(item_id) ON DELETE CASCADE
     );
     ''')
 
