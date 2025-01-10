@@ -37,4 +37,22 @@ def view_inventory():
     finally:
         session.close()
 
+def update_inventory_item(item_id: int, quantity: int = None, cost: float = None) -> str:
+    session: Session = next(get_db())
+    try:
+        item = session.query(InventoryItem).filter(InventoryItem.item_id == item_id).first()
+        if not item:
+            return f"Error: Item with ID {item_id} does not exist."
 
+        if quantity is not None:
+            item.quantity = quantity
+        if cost is not None:
+            item.cost = cost
+
+        session.commit()
+        return f"Inventory item with ID {item_id} updated successfully."
+    except Exception as e:
+        session.rollback()
+        return f"Error: {str(e)}"
+    finally:
+        session.close()
