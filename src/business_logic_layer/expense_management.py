@@ -58,6 +58,20 @@ def view_expenses_by_category(category: str):
     finally:
         session.close()
 
+def view_expenses_by_date(start_date: str = None, end_date: str = None):
+    session: Session = next(get_db())
+    try:
+        query = session.query(Expense)
+        if start_date:
+            query = query.filter(Expense.date >= start_date)
+        if end_date:
+            query = query.filter(Expense.date <= end_date)
+        return query.all()
+    except Exception as e:
+        return f"Error: {str(e)}"
+    finally:
+        session.close()
+
 def delete_expense(expense_id: int) -> str:
     session: Session = next(get_db())
     try:
