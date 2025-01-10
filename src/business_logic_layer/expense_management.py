@@ -57,3 +57,19 @@ def view_expenses_by_category(category: str):
         return f"Error: {str(e)}"
     finally:
         session.close()
+
+def delete_expense(expense_id: int) -> str:
+    session: Session = next(get_db())
+    try:
+        expense = session.query(Expense).filter(Expense.expense_id == expense_id).first()
+        if not expense:
+            return f"Error: Expense with ID {expense_id} does not exist."
+
+        session.delete(expense)
+        session.commit()
+        return f"Expense with ID {expense_id} deleted successfully."
+    except Exception as e:
+        session.rollback()
+        return f"Error: {str(e)}"
+    finally:
+        session.close()
