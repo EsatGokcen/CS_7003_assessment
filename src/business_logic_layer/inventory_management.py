@@ -56,3 +56,19 @@ def update_inventory_item(item_id: int, quantity: int = None, cost: float = None
         return f"Error: {str(e)}"
     finally:
         session.close()
+
+def delete_inventory_item(item_id: int) -> str:
+    session: Session = next(get_db())
+    try:
+        item = session.query(InventoryItem).filter(InventoryItem.item_id == item_id).first()
+        if not item:
+            return f"Error: Item with ID {item_id} does not exist."
+
+        session.delete(item)
+        session.commit()
+        return f"Item with ID {item_id} deleted successfully."
+    except Exception as e:
+        session.rollback()
+        return f"Error: {str(e)}"
+    finally:
+        session.close()
