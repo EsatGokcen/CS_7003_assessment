@@ -1,7 +1,9 @@
 from sqlalchemy import Column, Integer, Float, String, ForeignKey
-from sqlalchemy.orm import relationship
-from src.data_access_layer.database_connection import Base
+from sqlalchemy.orm import Session, relationship
+from datetime import datetime
+from src.data_access_layer.database_connection import Base, get_db
 from src.data_access_layer.sales_table import add_sale, view_sales
+from src.business_logic_layer.user_management import User
 
 class Sale(Base):
     __tablename__ = "sales"
@@ -19,11 +21,25 @@ class Sale(Base):
 
 
 # Records a sale with validation.
-def record_sale(user_id: int, date: str, total_amount: float):
-    if not user_id or not date or total_amount <= 0:
-        return "Error: Invalid input for user ID, date, or total amount."
-    add_sale(user_id, date, total_amount)
-    return "Sale recorded successfully."
+def record_sale(user_id: int, date: str, total_amount: float) -> str:
+    session: Session = next(get_db())
+    try:
+        # Validate the user exists
+        user = session.query(User).filter(User.user_id == user_id).first()
+        if not user:
+            return f"Error: User with ID {user_id} does not exist."
+
+        # Add the sale record
+        new_sale = Sale(user_id=user_id, date=date, total_amount=total_amount)
+        session.add(new_sale)
+        session.commit()
+        return "Sale recorded successfully."
+    except Exception as e:
+        session.rollback()
+        return f"Error: {str(e)}"
+    finally:
+        session.close()
+
 
 # Fetches and returns all sales.
 def list_sales():
