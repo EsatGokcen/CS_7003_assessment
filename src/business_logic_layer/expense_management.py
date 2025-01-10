@@ -48,3 +48,12 @@ def view_expenses():
     finally:
         session.close()
 
+def view_expenses_by_category(category: str):
+    session: Session = next(get_db())
+    try:
+        expenses = session.query(Expense).filter(Expense.category == category).all()
+        return expenses
+    except Exception as e:
+        return f"Error: {str(e)}"
+    finally:
+        session.close()
