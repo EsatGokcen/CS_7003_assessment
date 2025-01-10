@@ -40,6 +40,25 @@ def record_sale(user_id: int, date: str, total_amount: float) -> str:
     finally:
         session.close()
 
+def calculate_revenue(start_date: str = None, end_date: str = None) -> float:
+    session: Session = next(get_db())
+    try:
+        query = session.query(Sale)
+
+        # Filter by date range if provided
+        if start_date:
+            query = query.filter(Sale.date >= start_date)
+        if end_date:
+            query = query.filter(Sale.date <= end_date)
+
+        # Sum up total_amount from the query
+        total_revenue = sum(sale.total_amount for sale in query.all())
+        return total_revenue
+    except Exception as e:
+        return f"Error: {str(e)}"
+    finally:
+        session.close()
+
 
 # Fetches and returns all sales.
 def list_sales():
