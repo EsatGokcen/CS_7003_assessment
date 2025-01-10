@@ -15,13 +15,6 @@ class User(Base):
     def __repr__(self):
         return f"<User(user_id={self.user_id}, username='{self.username}', is_admin={self.is_admin})>"
 
-# Define relationships after importing dependent models
-from src.business_logic_layer.sales_management import Sale
-from src.business_logic_layer.expense_management import Expense
-
-User.sales = relationship("Sale", back_populates="user")
-User.expenses = relationship("Expense", back_populates="user")
-
 # User-related functionality
 def register_user(username: str, password: str, email: str, is_admin: bool = False) -> str:
     if not username or not password or not email:

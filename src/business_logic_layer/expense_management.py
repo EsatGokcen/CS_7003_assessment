@@ -19,6 +19,9 @@ class Expense(Base):
     def __repr__(self):
         return f"<Expense(expense_id={self.expense_id}, user_id={self.user_id}, date='{self.date}', amount={self.amount}, category='{self.category}')>"
 
+# Add this relationship to the User model
+User.expenses = relationship("Expense", back_populates="user", lazy="joined")
+
 def record_expense(user_id: int, date: str, amount: float, category: str, description: str = None) -> str:
     session: Session = next(get_db())
     try:

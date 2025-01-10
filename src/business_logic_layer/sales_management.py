@@ -17,6 +17,8 @@ class Sale(Base):
     def __repr__(self):
         return f"<Sale(sale_id={self.sale_id}, user_id={self.user_id}, date='{self.date}', total_amount={self.total_amount})>"
 
+# Add this relationship to the User model
+User.sales = relationship("Sale", back_populates="user", lazy="joined")
 
 # Records a sale with validation.
 def record_sale(user_id: int, date: str, total_amount: float) -> str:
