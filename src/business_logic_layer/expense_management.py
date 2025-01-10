@@ -37,3 +37,14 @@ def record_expense(user_id: int, date: str, amount: float, category: str, descri
         return f"Error: {str(e)}"
     finally:
         session.close()
+
+def view_expenses():
+    session: Session = next(get_db())
+    try:
+        expenses = session.query(Expense).all()
+        return expenses
+    except Exception as e:
+        return f"Error: {str(e)}"
+    finally:
+        session.close()
+
