@@ -12,8 +12,9 @@ class User(Base):
     email = Column(String, nullable=False, unique=True)
     is_admin = Column(Boolean, default=False)
 
-    # Relationship with Sale
+    # Relationship with Sale and Expense
     sales = relationship("Sale", back_populates="user")
+    expenses = relationship("Expense", back_populates="user")
 
     def __repr__(self):
         return f"<User(user_id={self.user_id}, username='{self.username}', is_admin={self.is_admin})>"
