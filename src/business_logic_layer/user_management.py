@@ -64,6 +64,18 @@ def update_user(user_id: int, username: str = None, password: str = None, email:
     finally:
         session.close()
 
+def authenticate_user(username: str, password: str) -> bool:
+    session: Session = next(get_db())
+    try:
+        user = session.query(User).filter(User.username == username).first()
+        if user and user.password == password:  # Replace with hashed password validation
+            return True
+        return False
+    except Exception as e:
+        return False
+    finally:
+        session.close()
+
 def list_users():
     session: Session = next(get_db())
     try:
