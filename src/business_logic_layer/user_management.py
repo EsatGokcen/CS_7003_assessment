@@ -42,6 +42,28 @@ def register_user(username: str, password: str, email: str, is_admin: bool = Fal
     finally:
         session.close()
 
+def update_user(user_id: int, username: str = None, password: str = None, email: str = None) -> str:
+    session: Session = next(get_db())
+    try:
+        user = session.query(User).filter(User.user_id == user_id).first()
+        if not user:
+            return f"Error: User with ID {user_id} does not exist."
+
+        if username:
+            user.username = username
+        if password:
+            user.password = password  # Ensure passwords are hashed before saving
+        if email:
+            user.email = email
+
+        session.commit()
+        return f"User with ID {user_id} updated successfully."
+    except Exception as e:
+        session.rollback()
+        return f"Error: {str(e)}"
+    finally:
+        session.close()
+
 def list_users():
     session: Session = next(get_db())
     try:
