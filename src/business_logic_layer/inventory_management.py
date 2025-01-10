@@ -27,3 +27,14 @@ def add_inventory_item(item_name: str, quantity: int, cost: float) -> str:
     finally:
         session.close()
 
+def view_inventory():
+    session: Session = next(get_db())
+    try:
+        inventory = session.query(InventoryItem).all()
+        return inventory
+    except Exception as e:
+        return f"Error: {str(e)}"
+    finally:
+        session.close()
+
+
