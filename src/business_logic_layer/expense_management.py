@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, Float, String, ForeignKey
-from sqlalchemy.orm import relationship
-from src.data_access_layer.database_connection import Base
-from src.data_access_layer.expenses_table import add_expense, view_expenses
+from sqlalchemy.orm import Session, relationship
+from src.data_access_layer.database_connection import Base, get_db
+from src.business_logic_layer.user_management import User
 
 class Expense(Base):
     __tablename__ = "expenses"
@@ -19,16 +19,21 @@ class Expense(Base):
     def __repr__(self):
         return f"<Expense(expense_id={self.expense_id}, user_id={self.user_id}, date='{self.date}', amount={self.amount}, category='{self.category}')>"
 
+def record_expense(user_id: int, date: str, amount: float, category: str, description: str = None) -> str:
+    session: Session = next(get_db())
+    try:
+        # Validate user exists
+        user = session.query(User).filter(User.user_id == user_id).first()
+        if not user:
+            return f"Error: User with ID {user_id} does not exist."
 
-# Adds an expense entry with validation.
-def add_expense_entry(user_id: int, date: str, amount: float, category: str, description: str) -> str:
-    if not user_id or not date or not amount or not category:
-        return "Error: All fields except description are required."
-    if amount <= 0:
-        return "Error: Expense amount must be positive."
-    add_expense(user_id, date, amount, category, description)
-    return "Expense recorded successfully."
-
-# Fetches and returns all expenses.
-def list_expenses():
-    return view_expenses()
+        # Record the expense
+        new_expense = Expense(user_id=user_id, date=date, amount=amount, category=category, description=description)
+        session.add(new_expense)
+        session.commit()
+        return "Expense recorded successfully."
+    except Exception as e:
+        session.rollback()
+        return f"Error: {str(e)}"
+    finally:
+        session.close()
