@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, Boolean
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, relationship
 from src.data_access_layer.database_connection import Base, get_db
 
 # SQLAlchemy User Model
@@ -11,6 +11,9 @@ class User(Base):
     password = Column(String, nullable=False)
     email = Column(String, nullable=False, unique=True)
     is_admin = Column(Boolean, default=False)
+
+    # Relationship with Sale
+    sales = relationship("Sale", back_populates="user")
 
     def __repr__(self):
         return f"<User(user_id={self.user_id}, username='{self.username}', is_admin={self.is_admin})>"
