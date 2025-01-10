@@ -1,8 +1,6 @@
 from sqlalchemy import Column, Integer, Float, String, ForeignKey
 from sqlalchemy.orm import Session, relationship
-from datetime import datetime
 from src.data_access_layer.database_connection import Base, get_db
-from src.data_access_layer.sales_table import add_sale, view_sales
 from src.business_logic_layer.user_management import User
 
 class Sale(Base):
@@ -78,7 +76,18 @@ def view_sales_history(start_date: str = None, end_date: str = None):
     finally:
         session.close()
 
+def delete_sale(sale_id: int) -> str:
+    session: Session = next(get_db())
+    try:
+        sale = session.query(Sale).filter(Sale.sale_id == sale_id).first()
+        if not sale:
+            return f"Error: Sale with ID {sale_id} does not exist."
 
-# Fetches and returns all sales.
-def list_sales():
-    return view_sales()
+        session.delete(sale)
+        session.commit()
+        return f"Sale with ID {sale_id} deleted successfully."
+    except Exception as e:
+        session.rollback()
+        return f"Error: {str(e)}"
+    finally:
+        session.close()
