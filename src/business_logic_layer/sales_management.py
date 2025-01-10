@@ -13,7 +13,7 @@ class Sale(Base):
     date = Column(String, nullable=False)  # Stored as a string in SQLite
     total_amount = Column(Float, nullable=False)
 
-    # Optional relationship with User model
+    # Relationship with User model
     user = relationship("User", back_populates="sales")
 
     def __repr__(self):
@@ -54,6 +54,25 @@ def calculate_revenue(start_date: str = None, end_date: str = None) -> float:
         # Sum up total_amount from the query
         total_revenue = sum(sale.total_amount for sale in query.all())
         return total_revenue
+    except Exception as e:
+        return f"Error: {str(e)}"
+    finally:
+        session.close()
+
+def view_sales_history(start_date: str = None, end_date: str = None):
+    session: Session = next(get_db())
+    try:
+        query = session.query(Sale)
+
+        # Filter by date range if provided
+        if start_date:
+            query = query.filter(Sale.date >= start_date)
+        if end_date:
+            query = query.filter(Sale.date <= end_date)
+
+        # Fetch and return results
+        sales = query.all()
+        return sales
     except Exception as e:
         return f"Error: {str(e)}"
     finally:
