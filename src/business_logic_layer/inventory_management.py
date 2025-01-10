@@ -1,20 +1,13 @@
-from src.data_access_layer.inventory_table import add_item, view_inventory, view_item_in_inventory, delete_item
+from sqlalchemy import Column, Integer, Float, String
+from src.data_access_layer.database_connection import Base
 
-# Adds an inventory item with validation.
-def add_item_to_inventory(item_name: str, quantity: int, cost: float) -> str:
-    if not item_name or quantity <= 0 or cost <= 0:
-        return "Error: Invalid input for item name, quantity, or cost."
-    add_item(item_name, quantity, cost)
-    return "Item added to inventory successfully."
+class InventoryItem(Base):
+    __tablename__ = "inventory"
 
-# Fetches and returns all inventory items.
-def list_inventory():
-    return view_inventory()
+    item_id = Column(Integer, primary_key=True, autoincrement=True)
+    item_name = Column(String, nullable=False, unique=True)
+    quantity = Column(Integer, nullable=False)
+    cost = Column(Float, nullable=False)
 
-# Fetches and returns a specific inventory item.
-def list_item_in_inventory(item_name: str):
-    return view_item_in_inventory(item_name)
-
-# Deletes an item based on the ID.
-def remove_item(item_id: int):
-    return delete_item(item_id)
+    def __repr__(self):
+        return f"<InventoryItem(item_id={self.item_id}, item_name='{self.item_name}', quantity={self.quantity}, cost={self.cost})>"
