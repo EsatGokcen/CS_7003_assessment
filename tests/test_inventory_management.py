@@ -14,9 +14,10 @@ class TestInventoryManagement(unittest.TestCase):
         Base.metadata.drop_all(bind=engine)
 
     def setUp(self):
-        # Clear data before each test
+        # Clear all tables before each test
         session = next(get_db())
-        session.query(Base.metadata.tables["inventory"]).delete()
+        for table in Base.metadata.tables.values():
+            session.execute(table.delete())
         session.commit()
         session.close()
 
