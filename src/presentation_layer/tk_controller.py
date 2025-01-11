@@ -1,6 +1,7 @@
 import tkinter as tk
 
 from src.presentation_layer.login_window import LoginWindow
+from src.presentation_layer.user_management_window import UserManagementWindow
 
 
 class TkController:
@@ -17,7 +18,7 @@ class TkController:
 
     def show_user_management_window(self):
         self.clear_window()
-        # Logic
+        UserManagementWindow(self.root, self)
 
     def show_expense_management_window(self):
         self.clear_window()

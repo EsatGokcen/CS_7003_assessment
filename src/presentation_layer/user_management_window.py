@@ -65,7 +65,66 @@ class UserManagementWindow:
         tk.Button(add_window, text="Save", command=save_user).pack(pady=10)
 
     def update_user(self):
-        messagebox.showinfo("Coming Soon", "Update user functionality will be implemented.")
+        update_window = tk.Toplevel(self.master)
+        update_window.title("Update User")
+        update_window.geometry("400x400")
+
+        # User ID selection
+        tk.Label(update_window, text="User ID to Update:").pack(pady=5)
+        user_id_entry = tk.Entry(update_window)
+        user_id_entry.pack(pady=5)
+
+        # New username
+        tk.Label(update_window, text="New Username (leave blank to keep unchanged):").pack(pady=5)
+        new_username_entry = tk.Entry(update_window)
+        new_username_entry.pack(pady=5)
+
+        # New password
+        tk.Label(update_window, text="New Password (leave blank to keep unchanged):").pack(pady=5)
+        new_password_entry = tk.Entry(update_window, show="*")
+        new_password_entry.pack(pady=5)
+
+        # New email
+        tk.Label(update_window, text="New Email (leave blank to keep unchanged):").pack(pady=5)
+        new_email_entry = tk.Entry(update_window)
+        new_email_entry.pack(pady=5)
+
+        def save_update():
+            user_id = user_id_entry.get().strip()
+            new_username = new_username_entry.get().strip()
+            new_password = new_password_entry.get().strip()
+            new_email = new_email_entry.get().strip()
+
+            if not user_id:
+                messagebox.showerror("Error", "User ID is required.")
+                return
+
+            db = next(get_db())
+            try:
+                # Fetch the user to update
+                user = db.query(User).filter_by(user_id=user_id).first()
+                if not user:
+                    messagebox.showerror("Error", "User not found.")
+                    return
+
+                # Update user details if provided
+                if new_username:
+                    user.username = new_username
+                if new_password:
+                    user.password = new_password
+                if new_email:
+                    user.email = new_email
+
+                db.commit()
+                messagebox.showinfo("Success", "User updated successfully.")
+                update_window.destroy()
+            except Exception as e:
+                db.rollback()
+                messagebox.showerror("Error", f"An error occurred: {e}")
+            finally:
+                db.close()
+
+        tk.Button(update_window, text="Save Changes", command=save_update).pack(pady=20)
 
     def delete_user(self):
         messagebox.showinfo("Coming Soon", "Delete user functionality will be implemented.")
