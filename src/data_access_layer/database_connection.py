@@ -4,8 +4,11 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Session, sessionmaker
 
-# Ensure the database directory exists
-db_dir = "database"
+# Base directory for the project
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # Points to src
+
+# Ensure the database directory exists in the src directory
+db_dir = os.path.join(BASE_DIR, "database")
 os.makedirs(db_dir, exist_ok=True)
 
 # Path to the database
@@ -29,4 +32,7 @@ def get_db():
     finally:
         db.close()
 
-
+# Debugging the database path
+if __name__ == "__main__":
+    print(f"Database directory: {db_dir}")
+    print(f"Database path: {db_path}")
