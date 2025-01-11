@@ -1,4 +1,4 @@
-from src.data_access_layer.database_connection import get_db
+from src.data_access_layer.database_connection import Base, engine, get_db
 from src.business_logic_layer.user_management import User
 from src.business_logic_layer.expense_management import Expense
 from src.business_logic_layer.inventory_management import InventoryItem
@@ -49,6 +49,10 @@ def populate_sales(session):
 def main():
     db = next(get_db())  # Use the get_db() function to get a session
     try:
+        # Create all tables
+        Base.metadata.create_all(bind=engine)
+
+        # Populate data
         populate_users(db)
         populate_expenses(db)
         populate_inventory(db)
