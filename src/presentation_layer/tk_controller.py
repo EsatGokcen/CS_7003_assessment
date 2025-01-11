@@ -15,6 +15,26 @@ class TkController:
         self.clear_window()
         LoginWindow(self.root, self)
 
+    def show_user_management_window(self):
+        self.clear_window()
+        # Logic
+
+    def show_expense_management_window(self):
+        self.clear_window()
+        # Logic
+
+    def show_inventory_management_window(self):
+        self.clear_window()
+        # Logic
+
+    def show_sales_tracking_window(self):
+        self.clear_window()
+        # Logic
+
+    def show_reporting_window(self):
+        self.clear_window()
+        # Logic
+
     def clear_window(self):
         for widget in self.root.winfo_children():
             widget.destroy()
