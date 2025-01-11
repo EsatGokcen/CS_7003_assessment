@@ -1,8 +1,8 @@
 import sqlite3
 import os
-from sqlalchemy import Session, create_engine
+from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import Session, sessionmaker
 
 # Ensure the database directory exists
 db_dir = "database"
