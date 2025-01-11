@@ -127,7 +127,44 @@ class UserManagementWindow:
         tk.Button(update_window, text="Save Changes", command=save_update).pack(pady=20)
 
     def delete_user(self):
-        messagebox.showinfo("Coming Soon", "Delete user functionality will be implemented.")
+        delete_window = tk.Toplevel(self.master)
+        delete_window.title("Delete User")
+        delete_window.geometry("400x200")
+
+        # User ID entry
+        tk.Label(delete_window, text="User ID to Delete:").pack(pady=10)
+        user_id_entry = tk.Entry(delete_window)
+        user_id_entry.pack(pady=10)
+
+        def confirm_delete():
+            user_id = user_id_entry.get().strip()
+
+            if not user_id:
+                messagebox.showerror("Error", "User ID is required.")
+                return
+
+            db = next(get_db())
+            try:
+                # Fetch the user to delete
+                user = db.query(User).filter_by(user_id=user_id).first()
+                if not user:
+                    messagebox.showerror("Error", "User not found.")
+                    return
+
+                # Delete the user
+                db.delete(user)
+                db.commit()
+                messagebox.showinfo("Success", f"User with ID {user_id} deleted successfully.")
+                delete_window.destroy()
+            except Exception as e:
+                db.rollback()
+                messagebox.showerror("Error", f"An error occurred: {e}")
+            finally:
+                db.close()
+
+        # Buttons
+        tk.Button(delete_window, text="Delete User", command=confirm_delete).pack(pady=10)
+        tk.Button(delete_window, text="Cancel", command=delete_window.destroy).pack(pady=10)
 
     def view_all_users(self):
         db = next(get_db())
