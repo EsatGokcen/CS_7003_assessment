@@ -78,7 +78,29 @@ class ExpenseManagementWindow:
         self.master.wait_window(add_window)
 
     def view_all_expenses(self):
-        pass
+        db = next(get_db())
+        try:
+            expenses = db.query(Expense).all()
+            if not expenses:
+                messagebox.showinfo("All Expenses", "No expenses found.")
+                return
+
+            # Build the report
+            report_lines = ["ID | User ID | Date       | Amount   | Category      | Description"]
+            report_lines.append("-" * 60)
+            for expense in expenses:
+                report_lines.append(
+                    f"{expense.expense_id:<3} | {expense.user_id:<7} | {expense.date:<10} | {expense.amount:<8.2f} | {expense.category:<12} | {expense.description or ''}")
+
+            # Join the report lines with newlines
+            report = "\n".join(report_lines)
+
+            # Show the report in a messagebox
+            messagebox.showinfo("All Expenses", report)
+        except Exception as e:
+            messagebox.showerror("Error", f"An error occurred: {e}")
+        finally:
+            db.close()
 
     def view_expenses_by_category(self):
         pass
