@@ -15,13 +15,13 @@ class TestSalesManagement(unittest.TestCase):
         # Drop all tables after tests
         Base.metadata.drop_all(bind=engine)
 
+    # Start a new session for each test.
     def setUp(self):
-        # Clear data before each test
-        session = next(get_db())
-        for table in Base.metadata.tables.values():
-            session.execute(table.delete())
-        session.commit()
-        session.close()
+        self.db = next(get_db())  # Advance the generator to get the session
+
+    # Close the session after each test.
+    def tearDown(self):
+        self.db.close()
 
         # Create a test user
         register_user("testuser", "password123", "test@example.com", False)

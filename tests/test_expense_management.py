@@ -4,27 +4,23 @@ from src.data_access_layer.database_connection import Base, engine, get_db
 from sqlalchemy.orm import sessionmaker
 
 class TestExpenseManagement(unittest.TestCase):
-
     # Set up the database schema.
     @classmethod
     def setUpClass(cls):
         Base.metadata.create_all(bind=engine)
-        cls.Session = sessionmaker(bind=engine)
 
     # Drop the database schema.
     @classmethod
     def tearDownClass(cls):
         Base.metadata.drop_all(bind=engine)
 
-    # Start a new session for each test and clean up.
+    # Start a new session for each test.
     def setUp(self):
-        self.session = self.Session()
-        self.db = get_db()
-        self.db.__enter__()  # Initialize context manager
+        self.db = next(get_db())  # Advance the generator to get the session
 
-    # Rollback the session after each test.
+    # Close the session after each test.
     def tearDown(self):
-        self.db.__exit__(None, None, None)
+        self.db.close()
 
     # Test recording an expense.
     def test_record_expense(self):

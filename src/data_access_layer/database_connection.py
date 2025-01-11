@@ -1,6 +1,6 @@
 import sqlite3
 import os
-from sqlalchemy import create_engine
+from sqlalchemy import Session, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
@@ -23,10 +23,10 @@ SessionLocal = sessionmaker(bind=engine)
 
 # Utility function for SQLAlchemy session management
 def get_db():
-    """Get a session for SQLAlchemy ORM interactions."""
-    db = SessionLocal()
+    db = Session(bind=engine)
     try:
         yield db
     finally:
         db.close()
+
 
