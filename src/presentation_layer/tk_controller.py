@@ -1,5 +1,6 @@
 import tkinter as tk
 
+from src.presentation_layer.dashboard_window import DashboardWindow
 from src.presentation_layer.login_window import LoginWindow
 from src.presentation_layer.user_management_window import UserManagementWindow
 
@@ -15,6 +16,10 @@ class TkController:
     def show_login_window(self):
         self.clear_window()
         LoginWindow(self.root, self)
+
+    def show_dashboard_window(self):
+        self.clear_window()
+        DashboardWindow(self.root, self)
 
     def show_user_management_window(self):
         self.clear_window()

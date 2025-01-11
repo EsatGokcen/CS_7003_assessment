@@ -1,4 +1,11 @@
-from src.data_access_layer.users_table import create_users_table
+from src.business_logic_layer.initialize_database import initialize_database
+from src.presentation_layer.tk_controller import TkController
+
+
+def main():
+    initialize_database()
+    app = TkController()
+    app.start()
 
 if __name__ == '__main__':
-    create_users_table()
+    main()

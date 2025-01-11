@@ -39,7 +39,7 @@ class LoginWindow:
             user = db.query(User).filter_by(username=username, is_admin=True).first()
             if user and user.password == password:
                 messagebox.showinfo("Success", "Login successful!")
-                self.controller.show_main_window()  # Replace with the main application window
+                self.controller.show_dashboard_window()
             else:
                 messagebox.showerror("Error", "Invalid credentials.")
         except Exception as e:
