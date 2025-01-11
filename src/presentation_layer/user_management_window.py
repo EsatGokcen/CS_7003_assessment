@@ -64,6 +64,9 @@ class UserManagementWindow:
 
         tk.Button(add_window, text="Save", command=save_user).pack(pady=10)
 
+        # Make the window modal
+        self.master.wait_window(add_window)
+
     def update_user(self):
         update_window = tk.Toplevel(self.master)
         update_window.title("Update User")
@@ -126,6 +129,9 @@ class UserManagementWindow:
 
         tk.Button(update_window, text="Save Changes", command=save_update).pack(pady=20)
 
+        # Make the window modal
+        self.master.wait_window(update_window)
+
     def delete_user(self):
         delete_window = tk.Toplevel(self.master)
         delete_window.title("Delete User")
@@ -165,6 +171,9 @@ class UserManagementWindow:
         # Buttons
         tk.Button(delete_window, text="Delete User", command=confirm_delete).pack(pady=10)
         tk.Button(delete_window, text="Cancel", command=delete_window.destroy).pack(pady=10)
+
+        # Make the window modal
+        self.master.wait_window(delete_window)
 
     def view_all_users(self):
         db = next(get_db())
