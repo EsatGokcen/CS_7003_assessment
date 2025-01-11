@@ -7,7 +7,7 @@ from src.business_logic_layer.sales_management import Sale
 def populate_users(session):
     users = [
         User(username="john_doe", password="password123", email="john.doe@example.com", is_admin=False),
-        User(username="jane_smith", password="password456", email="jane.smith@example.com", is_admin=True),
+        User(username="admin", password="admin", email="jane.smith@example.com", is_admin=True),
         User(username="alice_brown", password="password789", email="alice.brown@example.com", is_admin=False),
     ]
     for user in users:
