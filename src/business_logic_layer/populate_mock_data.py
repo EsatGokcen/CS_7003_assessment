@@ -46,13 +46,10 @@ def populate_sales(session):
         if not session.query(Sale).filter_by(date=sale.date, user_id=sale.user_id).first():
             session.add(sale)
 
-def main():
+# Populates the database with mock data.
+def populate_mock_data():
     db = next(get_db())  # Use the get_db() function to get a session
     try:
-        # Create all tables
-        Base.metadata.create_all(bind=engine)
-
-        # Populate data
         populate_users(db)
         populate_expenses(db)
         populate_inventory(db)
@@ -61,9 +58,6 @@ def main():
         print("Mock data populated successfully.")
     except Exception as e:
         db.rollback()
-        print(f"Error occurred: {e}")
+        print(f"Error occurred while populating mock data: {e}")
     finally:
         db.close()
-
-if __name__ == "__main__":
-    main()
