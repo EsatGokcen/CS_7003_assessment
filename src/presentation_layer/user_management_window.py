@@ -170,12 +170,23 @@ class UserManagementWindow:
         db = next(get_db())
         try:
             users = db.query(User).all()
-            users_list = "\n".join([f"ID: {user.user_id}, Username: {user.username}, Email: {user.email}" for user in users])
-            if users_list:
-                messagebox.showinfo("All Users", users_list)
-            else:
+            if not users:
                 messagebox.showinfo("All Users", "No users found.")
+                return
+
+            # Build the report
+            report_lines = ["ID | Username       | Email"]
+            report_lines.append("-" * 30)  # Separator line
+            for user in users:
+                report_lines.append(f"{user.user_id:<3} | {user.username:<14} | {user.email}")
+
+            # Join the report lines with newlines
+            report = "\n".join(report_lines)
+
+            # Show the report in a messagebox
+            messagebox.showinfo("All Users", report)
         except Exception as e:
             messagebox.showerror("Error", f"An error occurred: {e}")
         finally:
             db.close()
+
