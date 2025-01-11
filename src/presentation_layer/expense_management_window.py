@@ -103,4 +103,46 @@ class ExpenseManagementWindow:
             db.close()
 
     def view_expenses_by_category(self):
-        pass
+        category_window = tk.Toplevel(self.master)
+        category_window.title("View Expenses by Category")
+        category_window.geometry("400x200")
+
+        tk.Label(category_window, text="Enter Category:").pack(pady=10)
+        category_entry = tk.Entry(category_window)
+        category_entry.pack(pady=10)
+
+        def filter_expenses():
+            category = category_entry.get().strip()
+            if not category:
+                messagebox.showerror("Error", "Category is required.")
+                return
+
+            db = next(get_db())
+            try:
+                expenses = db.query(Expense).filter_by(category=category).all()
+                if not expenses:
+                    messagebox.showinfo("Expenses", f"No expenses found in category '{category}'.")
+                    return
+
+                # Build the report
+                report_lines = ["ID | User ID | Date       | Amount   | Description"]
+                report_lines.append("-" * 50)
+                for expense in expenses:
+                    report_lines.append(
+                        f"{expense.expense_id:<3} | {expense.user_id:<7} | {expense.date:<10} | {expense.amount:<8.2f} | {expense.description or ''}")
+
+                # Join the report lines with newlines
+                report = "\n".join(report_lines)
+
+                # Show the report in a messagebox
+                messagebox.showinfo(f"Expenses in Category '{category}'", report)
+            except Exception as e:
+                messagebox.showerror("Error", f"An error occurred: {e}")
+            finally:
+                db.close()
+
+        tk.Button(category_window, text="Filter", command=filter_expenses).pack(pady=10)
+        tk.Button(category_window, text="Cancel", command=category_window.destroy).pack(pady=10)
+
+        # Make the window modal
+        self.master.wait_window(category_window)
