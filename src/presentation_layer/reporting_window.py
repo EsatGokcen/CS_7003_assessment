@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 from src.data_access_layer.database_connection import get_db
 from src.business_logic_layer.expense_management import Expense
+from src.business_logic_layer.inventory_management import InventoryItem
 
 class ReportingWindow:
     def __init__(self, master, controller):
@@ -76,7 +77,27 @@ class ReportingWindow:
         self.master.wait_window(report_window)
 
     def inventory_report(self):
-        pass
+        db = next(get_db())
+        try:
+            inventory = db.query(InventoryItem).all()
+            if not inventory:
+                messagebox.showinfo("Inventory Report", "No inventory items found.")
+                return
+
+            total_value = sum(item.quantity * item.cost for item in inventory)
+            report_lines = ["Item Name       | Quantity | Cost | Total Value"]
+            report_lines.append("-" * 40)
+            for item in inventory:
+                total = item.quantity * item.cost
+                report_lines.append(f"{item.item_name:<15} | {item.quantity:<8} | {item.cost:<5.2f} | {total:<10.2f}")
+
+            report_lines.append(f"\nTotal Inventory Value: {total_value:.2f}")
+            report = "\n".join(report_lines)
+            messagebox.showinfo("Inventory Report", report)
+        except Exception as e:
+            messagebox.showerror("Error", f"An error occurred: {e}")
+        finally:
+            db.close()
 
     def sales_report(self):
         pass
