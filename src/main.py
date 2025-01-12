@@ -10,5 +10,9 @@ def main():
     app = TkController()
     app.start()
 
+    # For ease of use, log in using:
+    # username: admin
+    # password: admin
+
 if __name__ == '__main__':
     main()

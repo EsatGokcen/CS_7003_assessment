@@ -26,7 +26,7 @@ class ReportingWindow:
     def expense_report(self):
         report_window = tk.Toplevel(self.master)
         report_window.title("Expense Report")
-        report_window.geometry("400x300")
+        report_window.geometry("450x350")
 
         tk.Label(report_window, text="Generate Expense Report").pack(pady=10)
         tk.Label(report_window, text="Enter Date Range (YYYY-MM-DD):").pack(pady=5)
@@ -104,7 +104,7 @@ class ReportingWindow:
     def sales_report(self):
         report_window = tk.Toplevel(self.master)
         report_window.title("Sales Report")
-        report_window.geometry("400x300")
+        report_window.geometry("450x350")
 
         tk.Label(report_window, text="Generate Sales Report").pack(pady=10)
         tk.Label(report_window, text="Enter Date Range (YYYY-MM-DD):").pack(pady=5)
