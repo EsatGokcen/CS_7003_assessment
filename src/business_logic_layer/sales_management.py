@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, Float, String, ForeignKey
+from sqlalchemy import Column, Integer, Float, String, ForeignKey, Index
 from sqlalchemy.orm import Session, relationship
 from src.data_access_layer.database_connection import Base, get_db
 from src.business_logic_layer.user_management import User
@@ -19,6 +19,9 @@ class Sale(Base):
 
 # Add this relationship to the User model
 User.sales = relationship("Sale", back_populates="user", lazy="joined")
+
+# Add an index for the date column
+Index('idx_sales_date', Sale.date)
 
 # Records a sale with validation.
 def record_sale(user_id: int, date: str, total_amount: float) -> str:

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, Float, String, ForeignKey
+from sqlalchemy import Column, Integer, Float, String, ForeignKey, Index
 from sqlalchemy.orm import Session, relationship
 from src.data_access_layer.database_connection import Base, get_db
 from src.business_logic_layer.user_management import User
@@ -21,6 +21,9 @@ class Expense(Base):
 
 # Add this relationship to the User model
 User.expenses = relationship("Expense", back_populates="user", lazy="joined")
+
+# Add an index for the category column
+Index('idx_expenses_category', Expense.category)
 
 def record_expense(user_id: int, date: str, amount: float, category: str, description: str = None) -> str:
     session: Session = next(get_db())
