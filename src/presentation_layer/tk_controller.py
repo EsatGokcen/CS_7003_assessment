@@ -2,6 +2,7 @@ import tkinter as tk
 
 from src.presentation_layer.dashboard_window import DashboardWindow
 from src.presentation_layer.expense_management_window import ExpenseManagementWindow
+from src.presentation_layer.inventory_management_window import InventoryManagementWindow
 from src.presentation_layer.login_window import LoginWindow
 from src.presentation_layer.user_management_window import UserManagementWindow
 
@@ -32,7 +33,7 @@ class TkController:
 
     def show_inventory_management_window(self):
         self.clear_window()
-        # Logic
+        InventoryManagementWindow(self.root, self)
 
     def show_sales_tracking_window(self):
         self.clear_window()
