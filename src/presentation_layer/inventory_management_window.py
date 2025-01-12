@@ -67,7 +67,56 @@ class InventoryManagementWindow:
         self.master.wait_window(add_window)
 
     def update_inventory_item(self):
-        pass
+        update_window = tk.Toplevel(self.master)
+        update_window.title("Update Inventory Item")
+        update_window.geometry("400x400")
+
+        tk.Label(update_window, text="Item ID to Update:").pack(pady=5)
+        item_id_entry = tk.Entry(update_window)
+        item_id_entry.pack(pady=5)
+
+        tk.Label(update_window, text="New Quantity (leave blank to keep unchanged):").pack(pady=5)
+        new_quantity_entry = tk.Entry(update_window)
+        new_quantity_entry.pack(pady=5)
+
+        tk.Label(update_window, text="New Cost (leave blank to keep unchanged):").pack(pady=5)
+        new_cost_entry = tk.Entry(update_window)
+        new_cost_entry.pack(pady=5)
+
+        def save_update():
+            item_id = item_id_entry.get().strip()
+            new_quantity = new_quantity_entry.get().strip()
+            new_cost = new_cost_entry.get().strip()
+
+            if not item_id:
+                messagebox.showerror("Error", "Item ID is required.")
+                return
+
+            db = next(get_db())
+            try:
+                item = db.query(InventoryItem).filter_by(item_id=item_id).first()
+                if not item:
+                    messagebox.showerror("Error", "Item not found.")
+                    return
+
+                if new_quantity:
+                    item.quantity = int(new_quantity)
+                if new_cost:
+                    item.cost = float(new_cost)
+
+                db.commit()
+                messagebox.showinfo("Success", "Inventory item updated successfully.")
+                update_window.destroy()
+            except Exception as e:
+                db.rollback()
+                messagebox.showerror("Error", f"An error occurred: {e}")
+            finally:
+                db.close()
+
+        tk.Button(update_window, text="Save Changes", command=save_update).pack(pady=10)
+
+        # Make the window modal
+        self.master.wait_window(update_window)
 
     def delete_inventory_item(self):
         pass
