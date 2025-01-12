@@ -5,7 +5,7 @@ from src.presentation_layer.tk_controller import TkController
 def main():
 
     # RUN THIS TO RESET DATABASE TO MOCK DATA
-    initialize_database()
+    #initialize_database()
 
     app = TkController()
     app.start()
