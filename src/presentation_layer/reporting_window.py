@@ -3,6 +3,7 @@ from tkinter import messagebox
 from src.data_access_layer.database_connection import get_db
 from src.business_logic_layer.expense_management import Expense
 from src.business_logic_layer.inventory_management import InventoryItem
+from src.business_logic_layer.sales_management import Sale
 
 class ReportingWindow:
     def __init__(self, master, controller):
@@ -99,5 +100,54 @@ class ReportingWindow:
         finally:
             db.close()
 
+
     def sales_report(self):
-        pass
+        report_window = tk.Toplevel(self.master)
+        report_window.title("Sales Report")
+        report_window.geometry("400x300")
+
+        tk.Label(report_window, text="Generate Sales Report").pack(pady=10)
+        tk.Label(report_window, text="Enter Date Range (YYYY-MM-DD):").pack(pady=5)
+
+        tk.Label(report_window, text="Start Date:").pack(pady=5)
+        start_date_entry = tk.Entry(report_window)
+        start_date_entry.pack(pady=5)
+
+        tk.Label(report_window, text="End Date:").pack(pady=5)
+        end_date_entry = tk.Entry(report_window)
+        end_date_entry.pack(pady=5)
+
+        def generate_report():
+            start_date = start_date_entry.get().strip()
+            end_date = end_date_entry.get().strip()
+
+            if not start_date or not end_date:
+                messagebox.showerror("Error", "Both start and end dates are required.")
+                return
+
+            db = next(get_db())
+            try:
+                sales = db.query(Sale).filter(Sale.date >= start_date, Sale.date <= end_date).all()
+                if not sales:
+                    messagebox.showinfo("Sales Report", "No sales found in the given date range.")
+                    return
+
+                total_sales = sum(sale.total_amount for sale in sales)
+                report_lines = ["Date       | Total Sales"]
+                report_lines.append("-" * 20)
+                for sale in sales:
+                    report_lines.append(f"{sale.date:<10} | {sale.total_amount:.2f}")
+
+                report_lines.append(f"\nTotal Sales: {total_sales:.2f}")
+                report = "\n".join(report_lines)
+                messagebox.showinfo("Sales Report", report)
+            except Exception as e:
+                messagebox.showerror("Error", f"An error occurred: {e}")
+            finally:
+                db.close()
+
+        tk.Button(report_window, text="Generate", command=generate_report).pack(pady=10)
+        tk.Button(report_window, text="Cancel", command=report_window.destroy).pack(pady=10)
+
+        # Make the window modal
+        self.master.wait_window(report_window)
