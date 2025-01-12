@@ -1,4 +1,7 @@
 import tkinter as tk
+from tkinter import messagebox
+from src.data_access_layer.database_connection import get_db
+from src.business_logic_layer.sales_management import Sale
 
 class SalesTrackingWindow:
     def __init__(self, master, controller):
@@ -19,7 +22,48 @@ class SalesTrackingWindow:
         tk.Button(master, text="Back to Dashboard", width=20, command=self.controller.show_dashboard_window).pack(pady=20)
 
     def record_sale(self):
-        pass
+        record_window = tk.Toplevel(self.master)
+        record_window.title("Record New Sale")
+        record_window.geometry("400x300")
+
+        tk.Label(record_window, text="User ID:").pack(pady=5)
+        user_id_entry = tk.Entry(record_window)
+        user_id_entry.pack(pady=5)
+
+        tk.Label(record_window, text="Date (YYYY-MM-DD):").pack(pady=5)
+        date_entry = tk.Entry(record_window)
+        date_entry.pack(pady=5)
+
+        tk.Label(record_window, text="Total Amount:").pack(pady=5)
+        total_amount_entry = tk.Entry(record_window)
+        total_amount_entry.pack(pady=5)
+
+        def save_sale():
+            user_id = user_id_entry.get().strip()
+            date = date_entry.get().strip()
+            total_amount = total_amount_entry.get().strip()
+
+            if not user_id or not date or not total_amount:
+                messagebox.showerror("Error", "All fields are required.")
+                return
+
+            db = next(get_db())
+            try:
+                new_sale = Sale(user_id=user_id, date=date, total_amount=float(total_amount))
+                db.add(new_sale)
+                db.commit()
+                messagebox.showinfo("Success", "Sale recorded successfully.")
+                record_window.destroy()
+            except Exception as e:
+                db.rollback()
+                messagebox.showerror("Error", f"An error occurred: {e}")
+            finally:
+                db.close()
+
+        tk.Button(record_window, text="Save", command=save_sale).pack(pady=10)
+
+        # Make the window modal
+        self.master.wait_window(record_window)
 
     def view_all_sales(self):
         pass
