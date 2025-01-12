@@ -66,7 +66,25 @@ class SalesTrackingWindow:
         self.master.wait_window(record_window)
 
     def view_all_sales(self):
-        pass
+        db = next(get_db())
+        try:
+            sales = db.query(Sale).all()
+            if not sales:
+                messagebox.showinfo("Sales", "No sales records found.")
+                return
+
+            report_lines = ["ID | User ID | Date       | Total Amount"]
+            report_lines.append("-" * 40)
+            for sale in sales:
+                report_lines.append(
+                    f"{sale.sale_id:<3} | {sale.user_id:<7} | {sale.date:<10} | {sale.total_amount:<12.2f}")
+
+            report = "\n".join(report_lines)
+            messagebox.showinfo("All Sales", report)
+        except Exception as e:
+            messagebox.showerror("Error", f"An error occurred: {e}")
+        finally:
+            db.close()
 
     def view_sales_by_date(self):
         pass
