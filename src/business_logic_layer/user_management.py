@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, Boolean
 from sqlalchemy.orm import Session, relationship
 from src.data_access_layer.database_connection import Base, get_db
+from src.business_logic_layer.password_hashing_functions import hash_password, verify_password
 
 # SQLAlchemy User Model
 class User(Base):
@@ -31,8 +32,11 @@ def register_user(username: str, password: str, email: str, is_admin: bool = Fal
         if existing_user:
             return "Error: Username or email already exists."
 
+        # Hash the password
+        hashed_password = hash_password(password)
+
         # Create and add new user
-        new_user = User(username=username, password=password, email=email, is_admin=is_admin)
+        new_user = User(username=username, password=hashed_password, email=email, is_admin=is_admin)
         session.add(new_user)
         session.commit()
         return "User registered successfully."
@@ -52,7 +56,7 @@ def update_user(user_id: int, username: str = None, password: str = None, email:
         if username:
             user.username = username
         if password:
-            user.password = password  # Ensure passwords are hashed before saving
+            user.password = hash_password(password)  # Hash the new password before saving
         if email:
             user.email = email
 
@@ -68,7 +72,7 @@ def authenticate_user(username: str, password: str) -> bool:
     session: Session = next(get_db())
     try:
         user = session.query(User).filter(User.username == username).first()
-        if user and user.password == password:  # Replace with hashed password validation
+        if user and verify_password(user.password, password):  # Verify hashed password
             return True
         return False
     except Exception as e:
