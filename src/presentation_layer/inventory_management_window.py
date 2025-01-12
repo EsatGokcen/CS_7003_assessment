@@ -119,7 +119,43 @@ class InventoryManagementWindow:
         self.master.wait_window(update_window)
 
     def delete_inventory_item(self):
-        pass
+        delete_window = tk.Toplevel(self.master)
+        delete_window.title("Delete Inventory Item")
+        delete_window.geometry("400x200")
+
+        tk.Label(delete_window, text="Item ID to Delete:").pack(pady=10)
+        item_id_entry = tk.Entry(delete_window)
+        item_id_entry.pack(pady=10)
+
+        def confirm_delete():
+            item_id = item_id_entry.get().strip()
+
+            if not item_id:
+                messagebox.showerror("Error", "Item ID is required.")
+                return
+
+            db = next(get_db())
+            try:
+                item = db.query(InventoryItem).filter_by(item_id=item_id).first()
+                if not item:
+                    messagebox.showerror("Error", "Item not found.")
+                    return
+
+                db.delete(item)
+                db.commit()
+                messagebox.showinfo("Success", f"Item with ID {item_id} deleted successfully.")
+                delete_window.destroy()
+            except Exception as e:
+                db.rollback()
+                messagebox.showerror("Error", f"An error occurred: {e}")
+            finally:
+                db.close()
+
+        tk.Button(delete_window, text="Delete Item", command=confirm_delete).pack(pady=10)
+        tk.Button(delete_window, text="Cancel", command=delete_window.destroy).pack(pady=10)
+
+        # Make the window modal
+        self.master.wait_window(delete_window)
 
     def view_inventory(self):
         pass
