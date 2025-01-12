@@ -87,4 +87,41 @@ class SalesTrackingWindow:
             db.close()
 
     def view_sales_by_date(self):
-        pass
+        date_window = tk.Toplevel(self.master)
+        date_window.title("View Sales by Date")
+        date_window.geometry("400x200")
+
+        tk.Label(date_window, text="Enter Date (YYYY-MM-DD):").pack(pady=10)
+        date_entry = tk.Entry(date_window)
+        date_entry.pack(pady=10)
+
+        def filter_sales():
+            date = date_entry.get().strip()
+            if not date:
+                messagebox.showerror("Error", "Date is required.")
+                return
+
+            db = next(get_db())
+            try:
+                sales = db.query(Sale).filter_by(date=date).all()
+                if not sales:
+                    messagebox.showinfo("Sales", f"No sales found for date '{date}'.")
+                    return
+
+                report_lines = ["ID | User ID | Total Amount"]
+                report_lines.append("-" * 30)
+                for sale in sales:
+                    report_lines.append(f"{sale.sale_id:<3} | {sale.user_id:<7} | {sale.total_amount:<12.2f}")
+
+                report = "\n".join(report_lines)
+                messagebox.showinfo(f"Sales on {date}", report)
+            except Exception as e:
+                messagebox.showerror("Error", f"An error occurred: {e}")
+            finally:
+                db.close()
+
+        tk.Button(date_window, text="Filter", command=filter_sales).pack(pady=10)
+        tk.Button(date_window, text="Cancel", command=date_window.destroy).pack(pady=10)
+
+        # Make the window modal
+        self.master.wait_window(date_window)
