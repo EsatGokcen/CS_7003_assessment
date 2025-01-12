@@ -158,4 +158,22 @@ class InventoryManagementWindow:
         self.master.wait_window(delete_window)
 
     def view_inventory(self):
-        pass
+        db = next(get_db())
+        try:
+            inventory = db.query(InventoryItem).all()
+            if not inventory:
+                messagebox.showinfo("Inventory", "No inventory items found.")
+                return
+
+            report_lines = ["ID | Item Name       | Quantity | Cost"]
+            report_lines.append("-" * 40)
+            for item in inventory:
+                report_lines.append(
+                    f"{item.item_id:<3} | {item.item_name:<15} | {item.quantity:<8} | {item.cost:<6.2f}")
+
+            report = "\n".join(report_lines)
+            messagebox.showinfo("Inventory Items", report)
+        except Exception as e:
+            messagebox.showerror("Error", f"An error occurred: {e}")
+        finally:
+            db.close()
